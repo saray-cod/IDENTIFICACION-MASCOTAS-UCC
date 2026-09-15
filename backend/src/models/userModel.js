@@ -1,18 +1,20 @@
 const db = require('../config/db');
 
 const userModel = {
-    findByEmail: async (email) => {
-        const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    findByEmail: async (correo) => {
+        const [rows] = await db.execute('SELECT * FROM usuarios WHERE correo = ?', [correo]);
         return rows[0];
     },
 
 create: async (userData) => {
-        const { nombre, documento, email, cotraseña, carrera, rol } = userData;
+        const { nombre, documento, correo, password, carrera, rol } = userData;
+        const userRole = rol || 'ESTUDIANTE'; // Asignar 'ESTUDIANTE' si no se proporciona un rol
+
         const [result] = await db.query(
-            'INSERT INTO users (nombre, documento, email, cotraseña, carrera, rol) VALUES (?, ?, ?, ?, ?, ?)',
-            [nombre, documento, email, cotraseña, carrera, rol || 'ESTUDIANTE']
+            'INSERT INTO usuarios (nombre, documento, correo, password, carrera, rol) VALUES (?, ?, ?, ?, ?, ?)',
+            [nombre, documento, correo, password, carrera, userRole]
         );
-        return result;
+        return result.insertId;
     }
 };
 module.exports = userModel;
