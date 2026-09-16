@@ -3,12 +3,13 @@ const router = express.Router();
 const petController = require('../controllers/petController');
 const upload = require('../middlewares/uploadMiddleware');
 
-const petUploads = upload.fields([
+router.post = ('/register', upload.fields([
     { name: 'foto', maxCount: 1 },
     { name: 'vacunacion', maxCount: 1 },
     { name: 'desparasitacion', maxCount: 1 }
-]); 
+]), petController.registerPet);
 
-router.post('/registrer', petUploads, petController.registrerPet);
+router.get('/:mascotaId/carnet', petController.getPetCard);
+router.get('/publica/:mascotaId', petController.getPublicPetInfo);
 
 module.exports = router;

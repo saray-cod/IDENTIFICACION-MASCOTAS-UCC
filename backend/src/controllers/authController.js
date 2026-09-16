@@ -13,7 +13,16 @@ const register = async (req, res) => {
             return res.status(400).json({ message: 'El correo ya está registrado' });  
         }
 
-        const userId = await UserModel.create({ nombre, documento, correo, password, carrera, rol });
+        const rolesPermitidos = ['ESTUDIANTE', 'ADMIN', 'COORDINADOR', 'AUXILIAR' ];
+        const userRole = (rol && rolesPermitidos.includes(rol.toUpperCase())) ? rol.toUpperCase() : 'ESTUDIANTE';
+
+        const userId = await UserModel.create({ 
+            nombre, 
+            documento, 
+            correo, 
+            password, 
+            carrera, 
+            rol: userRole });
         res.status(201).json({ message: 'Usuario registrado exitosamente', userId });
     } catch (error) {
         console.error('Error al registrar usuario:', error);
@@ -41,7 +50,7 @@ const login = async (req, res) => {
         res.status(200).json({ 
             message: 'Inicio de sesión exitoso', 
             user: {
-                Id: user.id,
+                id: user.id,
                 nombre: user.nombre,
                 documento: user.documento,
                 correo: user.correo,
