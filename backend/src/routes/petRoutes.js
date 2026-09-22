@@ -9,7 +9,7 @@ router.post = ('/register', upload.fields([
     { name: 'desparasitacion', maxCount: 1 }
 ]), petController.registerPet);
 
-router.get('/:mascotaId/carnet', petController.getPetCard);
-router.get('/publica/:mascotaId', petController.getPublicPetInfo);
+router.get('/mascotaId/carnet', petController.getPetCard);
+router.get('/publica/mascotaId', petController.getPublicPetInfo);
 
 module.exports = router;
