@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Solicitudes - UCC</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Encabezado -->
+  <header>
+    <h2>Panel de Control e Inspección UCC</h2>
+    <button onclick="logout()" style="width: auto;">Cerrar Sesión</button>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h3>Solicitudes Pendientes de Revisión</h3>
+      <!-- Aquí la JS cargará las solicitudes -->
+      <div id="applications-list">Cargando solicitudes...</div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
