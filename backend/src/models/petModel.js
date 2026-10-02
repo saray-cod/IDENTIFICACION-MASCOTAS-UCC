@@ -17,14 +17,14 @@ const petModel = {
 
             for (const doc of documents) {
                 await connection.query(
-                    'INSERT INTO documentos (mascota_id, tipo, archivo_URL) VALUES (?, ?, ?)',
+                    'INSERT INTO documentos (mascotas_id, tipo, archivo_URL) VALUES (?, ?, ?)',
                     [mascotaId, doc.tipo, doc.archivo_URL]
                 );
             }
 
             await connection.query(
                 'INSERT INTO solicitudes (mascota_id, estado) VALUES (?, ?)',
-                [mascotaId, 'PENDIENTE']
+                [mascotaId, 'EN PROCESO']
             );
 
             await connection.commit();

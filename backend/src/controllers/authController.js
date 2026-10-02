@@ -2,10 +2,20 @@ const UserModel = require('../models/userModel');
 
 const register = async (req, res) => {
     try {
-        const { nombre, documento, correo, password, carrera, rol } = req.body;
+        const { nombre, documento, correo, password, carrera } = req.body;
 
         if (!nombre || !documento || !correo || !password || !carrera) {
-            return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+            return res.status(400).json({ 
+                message: 'Todos los campos son obligatorios',
+                campos_esperados: ['nombre', 'documento', 'correo', 'password', 'carrera']
+            });  
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(correo)) {
+            return res.status(400).json({ 
+                message: 'El correo no es válido'
+            });
         }
 
         const existingUser = await UserModel.findByEmail(correo);
@@ -13,8 +23,14 @@ const register = async (req, res) => {
             return res.status(400).json({ message: 'El correo ya está registrado' });  
         }
 
-        const rolesPermitidos = ['ESTUDIANTE', 'ADMIN', 'COORDINADOR', 'AUXILIAR' ];
-        const userRole = (rol && rolesPermitidos.includes(rol.toUpperCase())) ? rol.toUpperCase() : 'ESTUDIANTE';
+        const existingDocument = await UserModel.findByDocument(documento);
+        if (existingDocument) {
+            return res.status(400).json({ 
+                message: 'El documento ya está registrado' 
+            });
+        }
+
+        const userRole = 'ESTUDIANTE';
 
         const userId = await UserModel.create({ 
             nombre, 
@@ -23,10 +39,15 @@ const register = async (req, res) => {
             password, 
             carrera, 
             rol: userRole });
-        res.status(201).json({ message: 'Usuario registrado exitosamente', userId });
+
+        res.status(201).json({ message: 'Usuario registrado exitosamente', 
+            userId,
+            user: {id: userId, rol: userRole}
+            });
+
     } catch (error) {
         console.error('Error al registrar usuario:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+        res.status(500).json({ message: 'Error interno del servidor', error: error.message });
     }                                                    
 };
 
@@ -47,20 +68,27 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Contraseña incorrecta' });
         }
 
+        console.log(`Login exitoso: ${correo} (Rol: ${user.rol})`);
+
+        const jwt = require('jsonwebtoken');
+
+        const token = jwt.sign({ 
+                id: user.id,
+                rol: user.rol, 
+                correo: user.correo 
+            },
+            process.env.JWT_SECRET || 'tu_clave',
+            { expiresIn: '24h' }
+        );
+
         res.status(200).json({ 
             message: 'Inicio de sesión exitoso', 
-            user: {
-                id: user.id,
-                nombre: user.nombre,
-                documento: user.documento,
-                correo: user.correo,
-                carrera: user.carrera,
-                rol: user.rol 
-            }
+            token,
+            user: { id: user.id, nombre: user.nombre, rol: user.rol }
         });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+        res.status(500).json({ message: 'Error interno del servidor', error: error.message });
     }
 };
 

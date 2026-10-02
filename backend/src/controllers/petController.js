@@ -18,8 +18,8 @@ const registerPet = async (req, res) => {
 
         const foto_URL = `/uploads/${files.foto[0].filename}`;
         const documents = [
-            { tipo: 'vacunacion', archivo_URL: `/uploads/${files.vacunacion[0].filename}` },
-            { tipo: 'desparasitacion', archivo_URL: `/uploads/${files.desparasitacion[0].filename}` }
+            { tipo: 'VACUNA', archivo_URL: `/uploads/${files.vacunacion[0].filename}` },
+            { tipo: 'DESPARACITACION', archivo_URL: `/uploads/${files.desparasitacion[0].filename}` }
         ];
 
         const petId = await petModel.createPetWithAplication(
@@ -33,6 +33,34 @@ const registerPet = async (req, res) => {
     }
 };
 
+const getStudentPets = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const query = `
+            SELECT 
+                m.id, 
+                m.nombre, 
+                m.especie, 
+                m.raza, 
+                m.edad, 
+                m.sexo, 
+                m.foto_URL,
+                s.estado,
+                s.observaciones_veterinario AS observaciones
+            FROM mascotas m
+            LEFT JOIN solicitudes s ON s.mascota_id = m.id
+            WHERE m.usuario_id = ?
+        `;
+
+        const [rows] = await db.query(query, [userId]);
+        res.status(200).json(rows || []);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+};
+
 const getPetCard = async (req, res) => {
     try {
         const { mascotaId } = req.params;
@@ -43,18 +71,18 @@ const getPetCard = async (req, res) => {
             JOIN usuarios u ON m.usuario_id = u.id
             JOIN solicitudes s ON s.mascota_id = m.id
             WHERE m.id = ? AND s.estado = 'APROBADO'
-    `;
+        `;
 
-    const [rows] = await db.query(query, [mascotaId]);
+        const [rows] = await db.query(query, [mascotaId]);
 
-    if (rows.length === 0) {
+        if (rows.length === 0) {
         return res.status(404).json({ menssage: false, message: 'No fue posible generar el carnet. La solicitud de la mascota no ha sido aprobada' });
-    }
+        }
     
-    const mascota = rows[0];
-    const qrDataUrl = await generatePetQRCode(mascota.id);
+        const mascota = rows[0];
+        const qrDataUrl = await generatePetQRCode(mascota.id);
     
-    generatePetCardPDF(mascota, qrDataUrl, res);
+        generatePetCardPDF(mascota, qrDataUrl, res);
     }catch (error) {
         console.error('Error al generar el carnet de la mascota:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
@@ -89,29 +117,29 @@ const getPublicPetInfo = async (req, res) => {
             return res.status(404).json({ autorizado: false, message: 'Carnet no valido o mascota sin autorizacion vigente' });
         }
 
-    const petData = rows[0];
+        const petData = rows[0];
     
-    res.status(200).json({
-        autorizado: true,
-        estado: 'AUTORIZADO',
-        mascota: {
-            id: petData.mascota_id,
-            nombre: petData.mascota_nombre,
-            especie: petData.especie,
-            raza: petData.raza,
-            edad: petData.edad,
-            sexo: petData.sexo,
-            foto_URL: petData.foto_URL
-        },
-        propietario: {
-            nombre: petData.estudiante_nombre,
-            carrera: petData.carrera
-        }
+        res.status(200).json({
+            autorizado: true,
+            estado: 'AUTORIZADO',
+            mascota: {
+                id: petData.mascota_id,
+                nombre: petData.mascota_nombre,
+                especie: petData.especie,
+                raza: petData.raza,
+                edad: petData.edad,
+                sexo: petData.sexo,
+                foto_URL: petData.foto_URL
+            },
+            propietario: {
+                nombre: petData.estudiante_nombre,
+                carrera: petData.carrera
+            }
     });
     }catch (error) {
         console.error('Error al obtener el carnet de la mascota:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+        res.status(500).json({ message: 'Error interno del servidor', error: error.message });
     }
 };
     
-module.exports = { registerPet, getPetCard, getPublicPetInfo  };                       
+module.exports = { registerPet, getPetCard, getPublicPetInfo, getStudentPets };                       
