@@ -11,16 +11,16 @@ function logout() {
 document.getElementById('pet-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const formData = new formData ();
-    formData.appened('usuario_id', user.id);
-    formData.appened('nombre'.getElementById('nombre').value);
-    formData.appened('especie', document.getElementById('especie').value);
-    formData.appened('raza', document.getElementById('raza').value);
-    formData.appened('sexo', document.getElementById('sexo').value);
-    formData.appened('edad', document.getElementById('edad').value);
-    formData.appened('foto', document.getElementById('foto').files[0]);
-    formData.appened('vacunacion', document.getElementById('vacunacion').files[0]);
-    formData.appened('desparacitacion', document.getElementById('desparacitacion').files[0]);
+    const formData = new FormData();
+    formData.append('usuario_id', user.id);
+    formData.append('nombre', document.getElementById('nombre').value);
+    formData.append('especie', document.getElementById('especie').value);
+    formData.append('raza', document.getElementById('raza').value);
+    formData.append('sexo', document.getElementById('sexo').value);
+    formData.append('edad', document.getElementById('edad').value);
+    formData.append('foto', document.getElementById('foto').files[0]);
+    formData.append('vacunacion', document.getElementById('vacunacion').files[0]);
+    formData.append('desparasitacion', document.getElementById('desparasitacion').files[0]);
 
     try {
         const res = await fetch('http://localhost:3000/api/pets/register', {
