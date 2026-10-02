@@ -35,4 +35,34 @@ const reviewApplication = async (req, res) => {
     }
 };
 
-module.exports = { getPendigApplications, reviewApplication };
+const userModel = require ('../models/userModel');
+
+const crearUsuario = async (req, res) => {
+    try {
+        const {nombre, documento, correo, password, rol } = req.body;
+
+        if (!nombre || !documento || !correo || !password || !rol) {
+            return res.status(400).json({ message: 'hacen falta datos'});
+        }
+
+        if (!['AUXILIAR', 'COORDINADOR', 'ADMINISTRADOR'].includes(rol)) {
+            return res.json({message: 'Rol invalido'});
+        }
+
+        const userId = await userModel.create({
+            nombre,
+            documento, 
+            correo,
+            password,
+            carrera: 'N/A',
+            rol
+        });
+
+        res.status(201).json({ message: 'Usuario creado', userId });
+    } catch (error) {
+        console.error('Error:', error);
+        res.json(500).json({ message: 'Error al crear usuario'});
+    } 
+};
+
+module.exports = {getPendigApplications, reviewApplication, crearUsuario};
