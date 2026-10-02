@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso - Mascotas UCC</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <h2>Sistema de Registro y Carnetización de Mascotas UCC</h2>
+  </header>
+
+  <div class="container" style="max-width: 450px; margin-top: 2rem;">
+
+    <!-- Tarjeta Iniciar Sesión -->
+    <div class="card" id="login-card">
+      <h3>Iniciar Sesión</h3>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-correo">Correo Institucional</label>
+          <input type="email" id="login-correo" placeholder="usuario@ucc.edu.co" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </div>
+        <button type="submit">Ingresar</button>
+      </form>
+      <div style="margin-top: 1rem; text-align: center;">
+        <p>¿No tienes cuenta? 
+          <button type="button" onclick="toggleAuth('register')" style="width: auto; background: none; color: #2563EB; padding: 0; text-decoration: underline;">Registrarse</button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Tarjeta Registro -->
+    <div class="card" id="register-card" style="display: none;">
+      <h3>Registro de Usuario</h3>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
+        Se registrará automáticamente como <strong>ESTUDIANTE</strong>
+      </p>
+      
+      <form id="register-form">
+        <div class="form-group">
+          <label for="reg-nombre">Nombre Completo</label>
+          <input type="text" id="reg-nombre" placeholder="Ej: Juan Pérez" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-documento">Número de Documento *</label>
+          <input type="text" id="reg-documento" placeholder="Ej: 1234567890" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-correo">Correo Institucional</label>
+          <input type="email" id="reg-correo" placeholder="usuario@campusucc.edu.co" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Contraseña</label>
+          <input type="password" id="reg-password" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-carrera">Carrera o Programa </label>
+          <select id="reg-carrera" required>
+            <option value="">-- Selecciona tu Facultad --</option>
+            <option value="Ingeniería">Ingeniería</option>
+            <option value="Administración">Administración</option>
+            <option value="Educacion">Educacion</option>
+            <option value="Veterinaria">Veterinaria</option>
+            <option value="Enfermería">Enfermería</option>
+            <option value="Derecho">Derecho</option>
+            <option value="Psicologia">Psicologia</option>
+            <option value="otro">otro</option>
+          </select>
+
+        </div>
+        <button type="submit">Registrarse</button>
+      </form>
+      <div style="margin-top: 1rem; text-align: center;">
+        <p>¿Ya tienes cuenta? 
+          <button type="button" onclick="toggleAuth('login')"
+                  style="width: auto; background: none; color: #2563EB; padding: 0; text-decoration: underline;">
+                  Iniciar Sesión</button>
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
