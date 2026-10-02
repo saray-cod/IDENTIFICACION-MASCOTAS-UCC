@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - UCC</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h2>Panel de Control - UCC</h2>
+    <button onclick="logout()" style="width: auto;">Cerrar Sesión</button>
+  </header>
+
+  <div class="container">
+    <!-- Botones de navegación (tabs) -->
+    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+      <button onclick="showTab('solicitudes')" style="width: auto;">Ver Solicitudes</button>
+      <button onclick="showTab('crear-usuario')" style="width: auto; display: none;" id="btn-crear-usuario">Crear Usuario</button>
+    </div>
+
+    <!-- TAB 1: Solicitudes -->
+    <div id="solicitudes" class="tab-content">
+      <div class="card">
+        <h3>Solicitudes Pendientes</h3>
+        <div id="applications-list">Cargando solicitudes...</div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Crear Usuario (solo ADMIN) -->
+    <div id="crear-usuario" class="tab-content" style="display: none;">
+      <div class="card">
+        <h3>Crear Nuevo Usuario</h3>
+        <form id="crear-form">
+          <div class="form-group">
+            <label for="crear-nombre">Nombre</label>
+            <input type="text" id="crear-nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="crear-documento">Documento</label>
+            <input type="text" id="crear-documento" required>
+          </div>
+          <div class="form-group">
+            <label for="crear-correo">Correo</label>
+            <input type="email" id="crear-correo" required>
+          </div>
+          <div class="form-group">
+            <label for="crear-password">Contraseña</label>
+            <input type="password" id="crear-password" required>
+          </div>
+          <div class="form-group">
+            <label for="crear-rol">Rol</label>
+            <select id="crear-rol" required>
+              <option value="">-- Selecciona un rol --</option>
+              <option value="AUXILIAR">Auxiliar</option>
+              <option value="COORDINADOR">Coordinador (Veterinario)</option>
+            
+            </select>
+          </div>
+          <button type="button" onclick="crearUsuario()">Crear Usuario</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

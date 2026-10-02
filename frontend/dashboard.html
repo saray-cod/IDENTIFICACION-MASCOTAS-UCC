@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Estudiante - Mascotas UCC</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Encabezado con título y botón de salir -->
+  <header>
+    <h2>Portal Estudiantil de Mascotas UCC</h2>
+    <button onclick="logout()" style="width: auto;">Cerrar Sesión</button>
+  </header>
+
+  <div class="container">
+    <!-- Formulario para Registrar Mascota -->
+    <div class="card">
+      <h3>Registrar Nueva Mascota</h3>
+      <form id="pet-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="nombre">Nombre de la Mascota</label>
+          <input type="text" id="nombre" required placeholder="Ej: Firulais">
+        </div>
+        <div class="form-group">
+          <label for="especie">Especie</label>
+          <input type="text" id="especie" placeholder="Ej: Canino, Felino" required>
+        </div>
+        <div class="form-group">
+          <label for="raza">Raza</label>
+          <input type="text" id="raza" required placeholder="Ej: Labrador">
+        </div>
+        <div class="form-group">
+          <label for="edad">Edad</label>
+          <input type="text" id="edad" placeholder="Ej: 2 años" required>
+        </div>
+        <div class="form-group">
+          <label for="sexo">Sexo</label>
+          <select id="sexo">
+            <option value="MACHO">Macho</option>
+            <option value="HEMBRA">Hembra</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="foto">Foto de Perfil (Imagen JPG/PNG)</label>
+          <input type="file" id="foto" accept="image/*" required>
+        </div>
+        <div class="form-group">
+          <label for="vacunacion">Carnet de Vacunación (PDF)</label>
+          <input type="file" id="vacunacion" accept="application/pdf" required>
+        </div>
+        <div class="form-group">
+          <label for="desparasitacion">Certificado de Desparasitación (PDF)</label>
+          <input type="file" id="desparasitacion" accept="application/pdf" required>
+        </div>
+        <button type="submit">Enviar Solicitud</button>
+      </form>
+    </div>
+
+    <!-- Contenedor donde se cargarán las mascotas registradas -->
+    <div class="card">
+      <h3>Mis Mascotas Registradas</h3>
+      <div id="pets-list">Cargando mascotas...</div>
+    </div>
+  </div>
+
+  <script src="js/student.js"></script> 
+</body>
+</html>
